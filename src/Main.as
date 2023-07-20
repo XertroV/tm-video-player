@@ -6,6 +6,8 @@ void OnDestroyed() { MLHook::RemoveAllInjectedML(); }
 void OnDisabled() { OnDestroyed(); }
 
 void SetupVideos() {
+    // if we turn off a video, we need to have removed everything first.
+    MLHook::RemoveAllInjectedML();
     string pageCode = GenerateMLPageCode();
     print("SetupVideos:\n" + pageCode);
     if (S_VideosInMenu)

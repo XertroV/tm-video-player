@@ -1,5 +1,5 @@
 [Setting hidden]
-string S_SavedConfig = "[]";
+string S_SavedConfig = '[{"width":64,"y":80,"url":"https://dl6.webmfiles.org/big-buck-bunny_trailer.webm","x":-160,"height":36}]';
 [Setting hidden]
 bool S_VideosInMenu = true;
 [Setting hidden]
@@ -30,6 +30,8 @@ void S_RenderConfig() {
 
     DrawConfigEditor();
 
+    UI::Separator();
+
     UI::BeginDisabled(!configHasChanged);
     if (UI::Button("Save & Load Videos")) {
         SaveConfig();
@@ -56,13 +58,18 @@ void DrawConfigEditor() {
     }
     for (uint i = 0; i < LoadedConfig.Length; i++) {
         UI::PushID("ce"+i);
-        bool changed = DrawConfigEditRow(LoadedConfig[i]);
+        bool changed = DrawConfigEditRow(LoadedConfig[i], i);
         configHasChanged = changed || configHasChanged;
         UI::PopID();
     }
 }
 
-bool DrawConfigEditRow(Json::Value@ row) {
+bool DrawConfigEditRow(Json::Value@ row, uint i) {
+    UI::Separator();
+    if (UI::Button("Remove Video " + i)) {
+        LoadedConfig.Remove(i);
+        return true;
+    }
     bool anyChanged = false;
     anyChanged = DrawJsonInputFloatReturnChanged(row, "x", -160) || anyChanged;
     anyChanged = DrawJsonInputFloatReturnChanged(row, "y", 80) || anyChanged;
